@@ -18,44 +18,46 @@
 
 <body>
 	<div>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light p-3 px-5">
 			<a class="navbar-brand" href="/product/index">E-Commerce</a>
-			  
+
 			<div class="collapse navbar-collapse" id="navbarSupportedContent" style="justify-content: space-between">
-				<ul class="navbar-nav mr-auto">
+				<ul class="navbar-nav mr-auto flex-grow-1">
 					<li class="nav-item active">
 						<a class="nav-link" href="/product/index">Home <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
 						<a class="navbar-brand" href="/account/login">Admin</a>
 					</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-controller="Users" asp-action="Index">Users</a>
-						</li>
-					
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-controller="Roles" asp-action="Index">Roles</a>
-						</li>
-						@if (SignInManager.IsSignedIn(User))
-						{	
-							<li class="nav-item">
-								<p>Hello @User.Identity.Name!</p>
-							</li>
-							<li class="nav-item">
-								<form  class="form-inline" asp-area="Identity" asp-page="/Account/LogOff" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-									<button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-								</form>
-							</li>
-						}
-						else
-						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-							</li>
-						}
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-controller="Users" asp-action="Index">Users</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-controller="Roles" asp-action="Index">Roles</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav">
+				@if (SignInManager.IsSignedIn(User))
+				{
+					<li class="nav-item">
+						<p>Hello @User.Identity.Name!</p>
+					</li>
+					<li class="nav-item">
+							<form class="form-inline" asp-area="Identity" asp-action="LoggOff" asp-controller="Account" asp-route-returnUrl="@Url.Action("Login", "Account", new { area = "" })">
+							<button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+						</form>
+					</li>
+				}
+				else
+				{
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+					</li>
+				}
 				</ul>
 			</div>
 		</nav>

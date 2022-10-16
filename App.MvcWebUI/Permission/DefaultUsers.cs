@@ -50,6 +50,20 @@ namespace App.MvcWebUI.Permission
                 }
                 await roleManager.SeedClaimsForSuperAdmin();
             }
+
+            var role = await roleManager.FindByNameAsync("Admin");
+            var claims = await roleManager.GetClaimsAsync(role);
+            foreach (var claim in claims)
+            {
+                await roleManager.RemoveClaimAsync(role, claim);
+                var claims_2 = await roleManager.GetClaimsAsync(role);
+            }
+            foreach (var claim in DefaultClaims.DefaultClaimsList)
+            {
+                await roleManager.AddPermissionClaim(role, claim.Value);
+            }
+            claims = await roleManager.GetClaimsAsync(role);
+
         }
 
         private static async Task SeedClaimsForSuperAdmin(this RoleManager<CustomIdentityRole> roleManager)
@@ -60,15 +74,7 @@ namespace App.MvcWebUI.Permission
 
         public static async Task AddPermissionClaim(this RoleManager<CustomIdentityRole> roleManager, CustomIdentityRole role, string module)
         {
-            var allClaims = await roleManager.GetClaimsAsync(role);
-            var allPermissions = Permissions.GeneratePermissionsForModule(module);
-            foreach (var permission in allPermissions)
-            {
-                if (!allClaims.Any(a => a.Type == "Permission" && a.Value == permission))
-                {
-                    await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
-                }
-            }
+            await roleManager.AddClaimAsync(role, new Claim("Permission", module));
         }
     }
 }

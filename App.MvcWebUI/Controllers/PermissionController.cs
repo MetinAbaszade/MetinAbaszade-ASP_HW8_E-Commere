@@ -24,67 +24,11 @@ namespace App.MvcWebUI.Controllers
         }
 
 
-        //public static List<string> GetAllActionNames(string controllerName)
-        //{
-        //    var test = typeof(Program).Assembly.GetName().Name;
-        //    var controllerType = Assembly.Load(typeof(Program).Assembly.GetName().Name)
-        //        .GetTypes()
-        //        .FirstOrDefault(x => typeof(System.Web.Mvc.IController).IsAssignableFrom(x)
-        //            && x.Name.Equals(controllerName + "Controller", StringComparison.OrdinalIgnoreCase));
-
-        //    if (controllerType == null)
-        //    {
-        //        return Enumerable.Empty<string>().ToList();
-        //    }
-        //    return new System.Web.Mvc.ReflectedControllerDescriptor(controllerType)
-        //        .GetCanonicalActions().Select(x => x.ActionName)
-        //        .ToList();
-        //}
-
-
-
         public async Task<ActionResult> Index(string roleId)
         {
             var model = new PermissionViewModel();
 
-            var allPermissions = new List<RoleClaimsViewModel>()
-            { 
-                new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Products.Create",
-                },
-                new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Products.View",
-                },
-                new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Admin.Delete",
-                },
-                new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Admin.Update",
-                },
-                new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Roles.Index",
-                },
-                new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Users.Index",
-                },
-                 new RoleClaimsViewModel()
-                {
-                    Type = "Permissions",
-                    Value = "Permissions.Account.RegisterAccount",
-                },
-            };
+            var allPermissions = DefaultClaims.DefaultClaimsList;
 
            
             // Role - u tapiriq

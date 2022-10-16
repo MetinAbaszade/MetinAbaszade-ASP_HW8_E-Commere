@@ -26,7 +26,11 @@ namespace App.MvcWebUI.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            if (_signInManager.IsSignedIn(this.User))
+            {
+                return RedirectToAction(actionName: "Index", controllerName: "Admin");
+            }
+            else return View();
         }
 
         [HttpPost]
@@ -47,8 +51,7 @@ namespace App.MvcWebUI.Controllers
             return View(loginViewModel);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+         
         public IActionResult LoggOff()
         {
             _signInManager.SignOutAsync().Wait();
@@ -141,5 +144,11 @@ namespace App.MvcWebUI.Controllers
             }
             return View(registerViewModel);
         }
+
+        public IActionResult Accessdenied()
+        {
+           return View();
+        }
+
     }
 }

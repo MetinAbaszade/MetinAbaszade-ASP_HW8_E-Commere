@@ -6,10 +6,14 @@
 }
 
 <h2>Product List</h2>
+@if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Account.RegisterAccount")).Result.Succeeded)
+{
     <a class="btn btn-xs btn-success" asp-action="RegisterEditor" asp-controller="Account">Register new Account</a>
-
-    <a class="btn btn-xs btn-success" asp-action="Add" asp-controller="Admin">Add a new Product</a>
-
+}
+@if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Admin.AddProduct")).Result.Succeeded)
+{
+    <a class="btn btn-xs btn-success" asp-action="AddProduct" asp-controller="Admin">Add a new Product</a>
+}
 <table class="table">
     <thead>
         <tr>
@@ -41,10 +45,14 @@
                     @Html.DisplayFor(modelItem => item.UnitsInStock)
                 </td>
                 <td>
-
-                    <a class="btn btn-xs btn-info" asp-action="UpdateProduct" asp-controller="Admin" asp-route-productId="@item.ProductId">Update</a>
-                    <a class="btn btn-xs btn-danger" asp-action="DeleteProduct" asp-controller="Admin" asp-route-productId="@item.ProductId">Delete</a>
-
+                    @if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Admin.UpdateProduct")).Result.Succeeded)
+                    {
+                        <a class="btn btn-xs btn-info" asp-action="UpdateProduct" asp-controller="Admin" asp-route-productId="@item.ProductId">Update</a>
+                    }
+                    @if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Admin.DeleteProduct")).Result.Succeeded)
+                    {
+                        <a class="btn btn-xs btn-danger" asp-action="DeleteProduct" asp-controller="Admin" asp-route-productId="@item.ProductId">Delete</a>
+                    }
                 </td>
             </tr>
         }

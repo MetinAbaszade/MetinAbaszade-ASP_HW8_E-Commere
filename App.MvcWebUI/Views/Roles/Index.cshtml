@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@model IEnumerable<IdentityRole>
+﻿@using App.MvcWebUI.Entities
+@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<CustomIdentityRole>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -7,10 +8,8 @@
 <br />
 <form method="post" asp-action="addrole" asp-controller="roles">
     <div class="input-group">
-        <input name="roleName" class="form-control w-25">
-        <span class="input-group-btn">
-            <button class="btn btn-info">Add New Role</button>
-        </span>
+        <input name="roleName" class="form-control w-50 me-3"></input>
+            <button class="btn btn-info me-3">Add New Role</button>
     </div>
 </form>
 <table class="table table-striped" id="roleTable">

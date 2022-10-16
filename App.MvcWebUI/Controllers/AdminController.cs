@@ -41,7 +41,7 @@ namespace App.MvcWebUI.Controllers
         }
 
 
-        public IActionResult Add()
+        public IActionResult AddProduct()
         {
             var model = new AddProductViewModel()
             {
@@ -53,7 +53,7 @@ namespace App.MvcWebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product product)
+        public IActionResult AddProduct(Product product)
         {
             if (ModelState.IsValid)
             {

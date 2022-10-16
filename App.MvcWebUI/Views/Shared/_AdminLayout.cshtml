@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using App.MvcWebUI.Entities
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<CustomIdentityUser> SignInManager
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -23,22 +29,34 @@
 					<li class="nav-item">
 						<a class="navbar-brand" href="/account/login">Admin</a>
 					</li>
-					  <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Roles/Index">Roles</a>
-                    </li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-controller="Users" asp-action="Index">Users</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-controller="Roles" asp-action="Index">Roles</a>
+						</li>
+						@if (SignInManager.IsSignedIn(User))
+						{	
+							<li class="nav-item">
+								<p>Hello @User.Identity.Name!</p>
+							</li>
+							<li class="nav-item">
+								<form  class="form-inline" asp-area="Identity" asp-page="/Account/LogOff" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+									<button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+								</form>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+							</li>
+						}
 				</ul>
-
-				@*   <ul class="nav navbar-nav" style="margin-right:200px"  >
-				<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-				<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-				</svg> Cart
-				</a>
-				@await Component.InvokeAsync("CartSummary")
-				</li>
-
-				</ul>*@
 			</div>
 		</nav>
 	</div>

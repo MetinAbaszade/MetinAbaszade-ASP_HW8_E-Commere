@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace App.MvcWebUI.Controllers
 {
-
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private IProductService _productService;
@@ -24,8 +24,6 @@ namespace App.MvcWebUI.Controllers
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
         }
-
-        [Authorize(Roles = "Admin,Editor")]
 
         public async Task<IActionResult> Index()
         {
@@ -43,8 +41,6 @@ namespace App.MvcWebUI.Controllers
         }
 
 
-
-        [Authorize(Roles = "Editor")]
         public IActionResult Add()
         {
             var model = new AddProductViewModel()
@@ -57,7 +53,6 @@ namespace App.MvcWebUI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Editor")]
         public IActionResult Add(Product product)
         {
             if (ModelState.IsValid)
@@ -72,16 +67,14 @@ namespace App.MvcWebUI.Controllers
 
 
 
-        [Authorize(Roles = "Admin,Editor")]
-        public IActionResult Update(int productId)
+        public IActionResult UpdateProduct(int productId)
         {
             var product = _productService.GetById(productId);
             return View(product);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Editor")]
-        public IActionResult Update(Product product)
+        public IActionResult UpdateProduct(Product product)
         {
             _productService.Update(product);
             return RedirectToAction("Index");
@@ -89,16 +82,15 @@ namespace App.MvcWebUI.Controllers
 
 
 
-        [Authorize(Roles = "Admin,Editor")]
-        public IActionResult Delete(int productId)
+
+        public IActionResult DeleteProduct(int productId)
         {
             var product = _productService.GetById(productId);
             return View(product);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Editor")]
-        public IActionResult DeletePost(int productId)
+        public IActionResult DeleteProductPost(int productId)
         {
             _productService.Delete(productId);
             return RedirectToAction("index");

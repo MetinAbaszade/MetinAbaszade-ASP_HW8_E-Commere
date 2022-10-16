@@ -58,7 +58,32 @@ namespace App.MvcWebUI.Controllers
                 {
                     Type = "Permissions",
                     Value = "Permissions.Products.View",
-                }
+                },
+                new RoleClaimsViewModel()
+                {
+                    Type = "Permissions",
+                    Value = "Permissions.Admin.Delete",
+                },
+                new RoleClaimsViewModel()
+                {
+                    Type = "Permissions",
+                    Value = "Permissions.Admin.Update",
+                },
+                new RoleClaimsViewModel()
+                {
+                    Type = "Permissions",
+                    Value = "Permissions.Roles.Index",
+                },
+                new RoleClaimsViewModel()
+                {
+                    Type = "Permissions",
+                    Value = "Permissions.Users.Index",
+                },
+                 new RoleClaimsViewModel()
+                {
+                    Type = "Permissions",
+                    Value = "Permissions.Account.RegisterAccount",
+                },
             };
 
            

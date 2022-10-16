@@ -6,12 +6,9 @@
 }
 
 <h2>Product List</h2>
+    <a class="btn btn-xs btn-success" asp-action="RegisterEditor" asp-controller="Account">Register new Account</a>
 
-<a class="btn btn-xs btn-success" asp-action="Add" asp-controller="Admin">Add a new Product</a>
-@if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Products.Create")).Result.Succeeded)
-{
-    <a class="btn btn-xs btn-success" asp-action="RegisterEditor" asp-controller="Account">Register new Editor</a>
-}
+    <a class="btn btn-xs btn-success" asp-action="Add" asp-controller="Admin">Add a new Product</a>
 
 <table class="table">
     <thead>
@@ -44,8 +41,9 @@
                     @Html.DisplayFor(modelItem => item.UnitsInStock)
                 </td>
                 <td>
-                    <a class="btn btn-xs btn-info" asp-action="Update" asp-controller="Admin" asp-route-productId="@item.ProductId">Update</a>
-                    <a class="btn btn-xs btn-danger" asp-action="Delete" asp-controller="Admin" asp-route-productId="@item.ProductId">Delete</a>
+
+                    <a class="btn btn-xs btn-info" asp-action="UpdateProduct" asp-controller="Admin" asp-route-productId="@item.ProductId">Update</a>
+                    <a class="btn btn-xs btn-danger" asp-action="DeleteProduct" asp-controller="Admin" asp-route-productId="@item.ProductId">Delete</a>
 
                 </td>
             </tr>

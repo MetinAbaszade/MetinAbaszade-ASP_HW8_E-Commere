@@ -7,7 +7,7 @@ using System.Data;
 
 namespace App.MvcWebUI.Controllers
 {
-
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private readonly RoleManager<CustomIdentityRole> _roleManager;

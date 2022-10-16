@@ -15,7 +15,7 @@ namespace App.DataAccess.Concrete.EfEntityFramework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=METIN-ABASZADE;Initial Catalog=Northwind;Integrated Security=True;");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-G1Q07RP;Initial Catalog=Northwind;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
     }
 }

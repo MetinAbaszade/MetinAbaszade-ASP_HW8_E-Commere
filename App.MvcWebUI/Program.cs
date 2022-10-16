@@ -19,7 +19,7 @@ builder.Services.AddSingleton<ICartSessionService, CartSessionService>();
 builder.Services.AddSingleton<ICartService, CartService>();
 
 builder.Services.AddDbContext<CustomIdentityDbContext>
-    (options => options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Northwind;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+    (options => options.UseSqlServer(@"Data Source=DESKTOP-G1Q07RP;Database=E-Commerce;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();

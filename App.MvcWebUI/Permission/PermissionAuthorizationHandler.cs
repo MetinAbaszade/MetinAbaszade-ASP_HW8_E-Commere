@@ -37,6 +37,11 @@ namespace App.MvcWebUI.Permission
                 context.Succeed(requirement);
                 return;
             }
+            else
+            {
+                context.Fail();
+                return;
+            }
         }
     }
 }

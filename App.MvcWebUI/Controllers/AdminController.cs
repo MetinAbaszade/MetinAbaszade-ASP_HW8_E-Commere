@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace App.MvcWebUI.Controllers
 {
-  
+   
     public class AdminController : Controller
     {
         private IProductService _productService;
@@ -25,6 +25,7 @@ namespace App.MvcWebUI.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var model = new ProductListViewModel
@@ -65,8 +66,6 @@ namespace App.MvcWebUI.Controllers
         }
 
 
-
-
         public IActionResult UpdateProduct(int productId)
         {
             var product = _productService.GetById(productId);
@@ -79,8 +78,6 @@ namespace App.MvcWebUI.Controllers
             _productService.Update(product);
             return RedirectToAction("Index");
         }
-
-
 
 
         public IActionResult DeleteProduct(int productId)

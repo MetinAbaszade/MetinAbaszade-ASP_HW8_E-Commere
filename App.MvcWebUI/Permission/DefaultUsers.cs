@@ -40,6 +40,7 @@ namespace App.MvcWebUI.Permission
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true
             };
+
             if (userManager.Users.All(u => u.Id != defaultUser.Id))
             {
                 var user = await userManager.FindByEmailAsync(defaultUser.Email);
@@ -50,31 +51,24 @@ namespace App.MvcWebUI.Permission
                 }
                 await roleManager.SeedClaimsForSuperAdmin();
             }
-
-            var role = await roleManager.FindByNameAsync("Admin");
-            var claims = await roleManager.GetClaimsAsync(role);
-            foreach (var claim in claims)
-            {
-                await roleManager.RemoveClaimAsync(role, claim);
-                var claims_2 = await roleManager.GetClaimsAsync(role);
-            }
-            foreach (var claim in DefaultClaims.DefaultClaimsList)
-            {
-                await roleManager.AddPermissionClaim(role, claim.Value);
-            }
-            claims = await roleManager.GetClaimsAsync(role);
-
         }
 
         private static async Task SeedClaimsForSuperAdmin(this RoleManager<CustomIdentityRole> roleManager)
         {
             var adminRole = await roleManager.FindByNameAsync("Admin");
-            await roleManager.AddPermissionClaim(adminRole, "Products");
-        }
 
-        public static async Task AddPermissionClaim(this RoleManager<CustomIdentityRole> roleManager, CustomIdentityRole role, string module)
-        {
-            await roleManager.AddClaimAsync(role, new Claim("Permission", module));
+            var claims = await roleManager.GetClaimsAsync(adminRole);
+            foreach (var claim in claims)
+            {
+                await roleManager.RemoveClaimAsync(adminRole, claim);
+            }
+            claims = await roleManager.GetClaimsAsync(adminRole);
+            foreach (var claim in DefaultClaims.DefaultClaimsList)
+            {
+
+                await roleManager.AddClaimAsync(adminRole, new Claim(claim.Type, claim.Value));
+            }
+            claims = await roleManager.GetClaimsAsync(adminRole);
         }
     }
 }

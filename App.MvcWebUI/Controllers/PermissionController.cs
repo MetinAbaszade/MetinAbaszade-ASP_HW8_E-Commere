@@ -15,7 +15,7 @@ using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute
 
 namespace App.MvcWebUI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class PermissionController : Controller
     {
         private readonly RoleManager<CustomIdentityRole> _roleManager;
@@ -38,24 +38,24 @@ namespace App.MvcWebUI.Controllers
             var role = await _roleManager.FindByIdAsync(roleId);
             model.RoleId = roleId;
 
-            var ClaimValues = await (
-               from roleclaims in _dbContext.RoleClaims 
+            var roleClaimValues = await (
+               from roleclaims in _dbContext.RoleClaims
+               where roleclaims.RoleId == model.RoleId
                select roleclaims).ToListAsync();
 
-            var roleClaimValues = ClaimValues.FindAll(f => f.RoleId == model.RoleId).ToList();
             var allRoleClaimsViewModel = new List<RoleClaimsViewModel>();
 
 
-            foreach (var item in ClaimValues)
+            foreach (var item in DefaultClaims.DefaultClaimsList)
             {
                 var newRoleClaimsViewModel = new RoleClaimsViewModel()
                 {
-                    Value = item.ClaimValue,
-                    Type = item.ClaimType,
+                    Value = item.Value,
+                    Type = item.Type,
                     Selected = false
                 };
 
-                if (roleClaimValues.Any(a => a.ClaimValue == item.ClaimValue))
+                if (roleClaimValues.Any(a => a.ClaimValue == item.Value))
                 {
                     newRoleClaimsViewModel.Selected = true;
                 }
@@ -77,14 +77,7 @@ namespace App.MvcWebUI.Controllers
             var selectedClaims = model.RoleClaims.Where(a => a.Selected).ToList();
             foreach (var claim in selectedClaims)
             {
-                if (claim.Type == "Permission")
-                {
-                    await _roleManager.AddClaimAsync(role, new Claim("Permission", claim.Value));
-                }
-                else if (claim.Type == "Controller")
-                {
-                    await _roleManager.AddClaimAsync(role, new Claim("Controller", claim.Value));
-                }
+                await _roleManager.AddClaimAsync(role, new Claim(claim.Type, claim.Value));
             }
             return RedirectToAction("Index", new { roleId = model.RoleId });
         }

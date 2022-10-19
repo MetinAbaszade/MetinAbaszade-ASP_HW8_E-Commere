@@ -51,7 +51,7 @@ namespace App.MvcWebUI.Controllers
             return View(loginViewModel);
         }
 
-         
+
         public IActionResult LoggOff()
         {
             _signInManager.SignOutAsync().Wait();
@@ -66,54 +66,32 @@ namespace App.MvcWebUI.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult RegisterEditor(RegisterViewModel registerViewModel)
+
+        public IActionResult AddUser()
         {
-            if (ModelState.IsValid)
+            List<UserRolesViewModel> userRoles = new List<UserRolesViewModel>();
+
+            foreach (var role in _roleManager.Roles.ToList())
             {
-                CustomIdentityUser user = new CustomIdentityUser
+                var userRole = new UserRolesViewModel
                 {
-                    UserName = registerViewModel.Username,
-                    Email = registerViewModel.Email,
+                    RoleName = role.Name,
+                    Selected = false
                 };
-                // hemen identity(user,role,policy ola biler) yaranmasiyla bagli melumat verir
-                IdentityResult result = _userManager.CreateAsync(user, registerViewModel.Password).Result;
-
-                if (result.Succeeded)
-                {
-                    if (!_roleManager.RoleExistsAsync("Editor").Result)
-                    {
-                        CustomIdentityRole role = new CustomIdentityRole("Editor");
-
-                        IdentityResult roleResult = _roleManager.CreateAsync(role).Result;
-                        if (!roleResult.Succeeded)
-                        {
-                            ModelState.AddModelError("", "We can not add the role!");
-                            return View(registerViewModel);
-                        }
-                    }
-
-
-                    _userManager.AddToRoleAsync(user, "Editor").Wait();
-                    return RedirectToAction("Login", "Account");
-
-                }
+                userRoles.Add(userRole);
             }
+
+            RegisterViewModel registerViewModel = new RegisterViewModel()
+            {
+                UserRoles = userRoles
+            };
+
             return View(registerViewModel);
         }
 
-
-
-        public IActionResult Register()
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel registerViewModel)
+        public IActionResult AddUser(RegisterViewModel registerViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -138,16 +116,23 @@ namespace App.MvcWebUI.Controllers
                             return View(registerViewModel);
                         }
                     }
-                    _userManager.AddToRoleAsync(user, "Admin").Wait();
+                    foreach (var item in registerViewModel.UserRoles)
+                    {
+                        if (item.Selected)
+                        {
+                            _userManager.AddToRoleAsync(user, item.RoleName).Wait();
+                        }
+                    }
                     return RedirectToAction("Login", "Account");
                 }
             }
             return View(registerViewModel);
         }
 
+
         public IActionResult Accessdenied()
         {
-           return View();
+            return View();
         }
 
     }

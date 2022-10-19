@@ -6,11 +6,11 @@
 }
 
 <h2>Product List</h2>
-@if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Account.RegisterAccount")).Result.Succeeded)
+@if ((AuthorizationService.AuthorizeAsync(this.User, "Permissions.Account.RegisterAccount")).Result.Succeeded)
 {
-    <a class="btn btn-xs btn-success" asp-action="RegisterEditor" asp-controller="Account">Register new Account</a>
+    <a class="btn btn-xs btn-success" asp-action="AddUser" asp-controller="Account">Register new User</a>
 }
-@if ((AuthorizationService.AuthorizeAsync(User, "Permissions.Admin.AddProduct")).Result.Succeeded)
+@if ((AuthorizationService.AuthorizeAsync(this.User, "Permissions.Admin.AddProduct")).Result.Succeeded)
 {
     <a class="btn btn-xs btn-success" asp-action="AddProduct" asp-controller="Admin">Add a new Product</a>
 }

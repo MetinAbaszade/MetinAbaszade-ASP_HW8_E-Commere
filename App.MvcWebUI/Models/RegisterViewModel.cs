@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using App.MvcWebUI.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace App.MvcWebUI.Models
 {
@@ -15,5 +16,7 @@ namespace App.MvcWebUI.Models
         [Required]
         public string Email { get; set; }
 
+
+        public IList<UserRolesViewModel> UserRoles { get; set; }
     }
 }

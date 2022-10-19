@@ -8,15 +8,17 @@ using System.Data;
 
 namespace App.MvcWebUI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly RoleManager<CustomIdentityRole> _roleManager;
+        private readonly CustomIdentityDbContext _dbContext;
         private readonly IMvcControllerDiscovery _mvcControllerDiscovery;
 
-        public RolesController(RoleManager<CustomIdentityRole> roleManager, IMvcControllerDiscovery mvcControllerDiscovery)
+        public RolesController(RoleManager<CustomIdentityRole> roleManager, CustomIdentityDbContext dbContext, IMvcControllerDiscovery mvcControllerDiscovery)
         {
             _roleManager = roleManager;
+            _dbContext = dbContext;
             _mvcControllerDiscovery = mvcControllerDiscovery;
         }
 
@@ -33,6 +35,17 @@ namespace App.MvcWebUI.Controllers
             if (roleName != null)
             {
                 await _roleManager.CreateAsync(new CustomIdentityRole(roleName.Trim()));
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(string roleId)
+        {
+            var role = _dbContext.Roles.Where(r => r.Id == roleId).FirstOrDefault();
+            if (!String.IsNullOrEmpty(role.Name))
+            {
+                await _roleManager.DeleteAsync(role);
             }
             return RedirectToAction("Index");
         }

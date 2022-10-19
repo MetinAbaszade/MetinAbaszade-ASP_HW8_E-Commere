@@ -44,11 +44,8 @@
                             Action
                         </button>
                         <div class="dropdown-menu shadow animated--grow-in">
-                            <a class="dropdown-item">
-                                <i class="fas fa-pencil-alt"></i> Edit
-                            </a>
-                            <form class="d-inline">
-                                <a class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <form class="d-inline" asp-controller="Roles" asp-action="DeleteRole" asp-route-roleId="@role.Id">
+                                <button type="submit" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</button>
                             </form>
                             @if (role.Name != "SuperAdmin")
                             {

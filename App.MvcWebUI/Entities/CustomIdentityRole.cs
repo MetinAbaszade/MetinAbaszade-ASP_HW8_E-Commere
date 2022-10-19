@@ -14,7 +14,5 @@ namespace App.MvcWebUI.Entities
         {
             this.Name = name;
         }
-        [NotMapped]
-        public List<string>? Access { get; set; } = new List<string>() { new string("Mytest") }; 
     }
 }

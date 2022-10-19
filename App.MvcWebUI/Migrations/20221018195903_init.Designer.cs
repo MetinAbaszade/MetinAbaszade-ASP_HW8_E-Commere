@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.MvcWebUI.Migrations
 {
     [DbContext(typeof(CustomIdentityDbContext))]
-    [Migration("20221016165024_init")]
+    [Migration("20221018195903_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

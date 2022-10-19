@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace App.MvcWebUI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+  
     public class AdminController : Controller
     {
         private IProductService _productService;

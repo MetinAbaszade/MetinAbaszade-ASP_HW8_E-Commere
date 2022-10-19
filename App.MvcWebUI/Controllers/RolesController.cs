@@ -1,4 +1,5 @@
 ﻿using App.MvcWebUI.Entities;
+using App.MvcWebUI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,17 @@ namespace App.MvcWebUI.Controllers
     public class RolesController : Controller
     {
         private readonly RoleManager<CustomIdentityRole> _roleManager;
+        private readonly IMvcControllerDiscovery _mvcControllerDiscovery;
 
-        public RolesController(RoleManager<CustomIdentityRole> roleManager)
+        public RolesController(RoleManager<CustomIdentityRole> roleManager, IMvcControllerDiscovery mvcControllerDiscovery)
         {
             _roleManager = roleManager;
+            _mvcControllerDiscovery = mvcControllerDiscovery;
         }
 
         public async Task<IActionResult> Index()
         {
+            // var test = _mvcControllerDiscovery.GetControllers();
             var roles = await _roleManager.Roles.ToListAsync();
             return View(roles);
         }

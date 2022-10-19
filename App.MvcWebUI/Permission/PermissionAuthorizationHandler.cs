@@ -17,7 +17,7 @@ namespace App.MvcWebUI.Permission
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
-        {
+       {
             if (context.User == null)
             {
                 return;
@@ -31,7 +31,7 @@ namespace App.MvcWebUI.Permission
                 {
                     tf = true;
                 }
-            }                                    
+            }
             if (tf)
             {
                 context.Succeed(requirement);

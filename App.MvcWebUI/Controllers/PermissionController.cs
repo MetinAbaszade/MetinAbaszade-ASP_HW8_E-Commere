@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace App.MvcWebUI.Controllers
@@ -17,12 +19,13 @@ namespace App.MvcWebUI.Controllers
     public class PermissionController : Controller
     {
         private readonly RoleManager<CustomIdentityRole> _roleManager;
+        private readonly CustomIdentityDbContext _dbContext;
 
-        public PermissionController(RoleManager<CustomIdentityRole> roleManager)
+        public PermissionController(RoleManager<CustomIdentityRole> roleManager, CustomIdentityDbContext dbContext)
         {
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
-
 
         public async Task<ActionResult> Index(string roleId)
         {
@@ -30,24 +33,35 @@ namespace App.MvcWebUI.Controllers
 
             var allPermissions = DefaultClaims.DefaultClaimsList;
 
-           
+
             // Role - u tapiriq
             var role = await _roleManager.FindByIdAsync(roleId);
             model.RoleId = roleId;
 
+            var ClaimValues = await (
+               from roleclaims in _dbContext.RoleClaims 
+               select roleclaims).ToListAsync();
 
-            var claims = await _roleManager.GetClaimsAsync(role);
-            var allClaimValues = allPermissions.Select(a => a.Value).ToList();
-            var roleClaimValues = claims.Select(a => a.Value).ToList();
-            var authorizedClaims = allClaimValues.Intersect(roleClaimValues).ToList();
-            foreach (var permission in allPermissions)
+            var roleClaimValues = ClaimValues.FindAll(f => f.RoleId == model.RoleId).ToList();
+            var allRoleClaimsViewModel = new List<RoleClaimsViewModel>();
+
+
+            foreach (var item in ClaimValues)
             {
-                if (authorizedClaims.Any(a => a == permission.Value))
+                var newRoleClaimsViewModel = new RoleClaimsViewModel()
                 {
-                    permission.Selected = true;
+                    Value = item.ClaimValue,
+                    Type = item.ClaimType,
+                    Selected = false
+                };
+
+                if (roleClaimValues.Any(a => a.ClaimValue == item.ClaimValue))
+                {
+                    newRoleClaimsViewModel.Selected = true;
                 }
+                allRoleClaimsViewModel.Add(newRoleClaimsViewModel);
             }
-            model.RoleClaims = allPermissions;
+            model.RoleClaims = allRoleClaimsViewModel;
             return View(model);
         }
 
@@ -55,6 +69,7 @@ namespace App.MvcWebUI.Controllers
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
             var claims = await _roleManager.GetClaimsAsync(role);
+
             foreach (var claim in claims)
             {
                 await _roleManager.RemoveClaimAsync(role, claim);
@@ -62,7 +77,14 @@ namespace App.MvcWebUI.Controllers
             var selectedClaims = model.RoleClaims.Where(a => a.Selected).ToList();
             foreach (var claim in selectedClaims)
             {
-                await _roleManager.AddPermissionClaim(role, claim.Value);
+                if (claim.Type == "Permission")
+                {
+                    await _roleManager.AddClaimAsync(role, new Claim("Permission", claim.Value));
+                }
+                else if (claim.Type == "Controller")
+                {
+                    await _roleManager.AddClaimAsync(role, new Claim("Controller", claim.Value));
+                }
             }
             return RedirectToAction("Index", new { roleId = model.RoleId });
         }

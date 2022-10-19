@@ -3,6 +3,7 @@ using App.Business.Concrete;
 using App.DataAccess.Abstract;
 using App.DataAccess.Concrete.EfEntityFramework;
 using App.MvcWebUI.Entities;
+using App.MvcWebUI.Filters;
 using App.MvcWebUI.Permission;
 using App.MvcWebUI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,9 @@ builder.Services.AddDbContext<CustomIdentityDbContext>
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+builder.Services.AddMvc(options => options.Filters.Add(typeof(DynamicAuthorizationFilter)));
+builder.Services.AddSingleton<IMvcControllerDiscovery, MvcControllerDiscovery>();
+
 
 builder.Services.AddIdentity<CustomIdentityUser, CustomIdentityRole>()
     .AddEntityFrameworkStores<CustomIdentityDbContext>()
@@ -83,6 +87,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
 app.Run();

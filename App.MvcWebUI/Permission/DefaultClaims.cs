@@ -28,6 +28,12 @@ namespace App.MvcWebUI.Permission
                    Type = "Permissions",
                    Value = "Permissions.Account.RegisterAccount",
                 },
+                 new RoleClaimsViewModel()
+                {
+                   Type = "Controller",
+                   Value = ":Admin:Index",
+                },
+                
             };
     }
 }
